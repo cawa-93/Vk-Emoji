@@ -1,0 +1,24 @@
+{
+  "name": "Vk Emoji",
+  "version": "0.1.3",
+  "authors": [
+    "Alex Kozack <cawa-93@yandex.ru>"
+  ],
+  "description": "Replace symbols emoticons VK the corresponding HTML code",
+  "main": "Emoji.js",
+  "keywords": [
+    "Vk",
+    "Vkontakte",
+    "Вконтакте",
+    "Смайлы",
+    "Smilies"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
