@@ -1,6 +1,7 @@
 {
-  "name": "Vk Emoji",
+  "name": "Vk-Emoji",
   "version": "0.1.3",
+  "homepage": "https://github.com/cawa-93/Vk-Emoji",
   "authors": [
     "Alex Kozack <cawa-93@yandex.ru>"
   ],
@@ -9,6 +10,7 @@
   "keywords": [
     "Vk",
     "Vkontakte",
+    "API",
     "Вконтакте",
     "Смайлы",
     "Smilies"
