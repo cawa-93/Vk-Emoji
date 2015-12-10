@@ -1,10 +1,6 @@
-if (!window.Emoji) {
-	/**
-	 * Class для смайликов
-	 * @class
-	 * @type {Object}
-	 */
-	var Emoji = {
+var Emoji = (function () {
+	"use strict";
+	return {
 		/**
 		 * @type {RegExp}
 		 */
@@ -35,7 +31,7 @@ if (!window.Emoji) {
 		 */
 		emojiToHTML: function (str) {
 			str = str.replace(/&nbsp;/g, ' ').replace(/<br>/g, "\n");
-			var regs = {
+			let regs = {
 				'D83DDE07': /(\s|^)([0OО]:\))([\s\.,]|$)/g,
 				'D83DDE09': /(\s|^)(;-\)+)([\s\.,]|$)/g,
 				'D83DDE06': /(\s|^)([XХxх]-?D)([\s\.,]|$)/g,
@@ -50,12 +46,12 @@ if (!window.Emoji) {
 				'D83DDE28': /(\s|^)(:[oоOО])([\s\.,]|$)/g,
 				'2764': /(\s|^)(&lt;3)([\s\.,]|$)/g
 			};
-			for (var code in regs) {
+			for (let code in regs) {
 				str = str.replace(regs[code], function (match, pre, smile, space) {
 					return (pre || '') + Emoji.getEmojiHTML(code)+(space || '');
 				});
 			}
-			var regs = {
+			regs = {
 				'D83DDE0A': /(:-\))([\s\.,]|$)/g,
 				'D83DDE03': /(:-D)([\s\.,]|$)/g,
 				'D83DDE1C': /(;-[PР])([\s\.,]|$)/g,
@@ -78,7 +74,7 @@ if (!window.Emoji) {
 				'270C': /(:v:)([\s\.,]|$)/g,
 				'D83DDC4C': /(:ok:|:ок:)([\s\.,]|$)/g
 			};
-			for (var code in regs) {
+			for (let code in regs) {
 				str = str.replace(regs[code], function (match, smile, space) {
 					return Emoji.getEmojiHTML(code)+(space || '');
 				});
@@ -94,20 +90,25 @@ if (!window.Emoji) {
 		 * @param  {String} symbolstr Символ для замены
 		 */
 		emojiReplace: function (symbolstr) {
-			var i = 0;
-			var buffer = '', altBuffer = '', num;
-			var symbols = [];
-			var codes = [];
-			while(num = symbolstr.charCodeAt(i++)) {
-				var code = num.toString(16).toUpperCase();
-				var symbol = symbolstr.charAt(i - 1);
-				if (i == 2 && num == 8419) {
+			const symbols = [];
+			const codes = [];
+			let out = '';
+			let buffer = '';
+			let altBuffer = '';
+
+			for (let i = 0; i < symbolstr.length; i++) {
+				const num = symbolstr.charCodeAt(i)
+				const code = num.toString(16).toUpperCase();
+				const symbol = symbolstr.charAt(i);
+
+				if (i === 1 && num === 8419) {
 					codes.push('003'+symbolstr.charAt(0)+'20E3');
 					symbols.push(symbolstr.charAt(0));
 					buffer = '';
 					altBuffer = '';
 					continue;
 				}
+
 				buffer += code;
 				altBuffer += symbol;
 				if (!symbol.match(Emoji.emojiCharSeq)) {
@@ -116,19 +117,21 @@ if (!window.Emoji) {
 					buffer = '';
 					altBuffer = '';
 				}
-			}
+			};
+
 			if (buffer) {
 				codes.push(buffer);
 				symbols.push(altBuffer);
 			}
-			var out = '';
-			var buffer = '';
-			var altBuffer = '';
-			var joiner = false;
-			var isFlag = false;
-			for (var i in codes) {
-				var code = codes[i];
-				var symbol = symbols[i];
+
+			buffer = '';
+			altBuffer = '';
+
+			let joiner = false;
+			let isFlag = false;
+			for (let i = 0; i < codes.length; i++) {
+				const code = codes[i];
+				const symbol = symbols[i];
 				if (symbol.match(/\uD83C[\uDFFB-\uDFFF]/)) { // colors
 					buffer += code;
 					altBuffer += symbol;
@@ -140,7 +143,7 @@ if (!window.Emoji) {
 					joiner = false;
 					continue;
 				}
-				if (code == '200C' || code == '200D') { // joiners
+				if (code === '200C' || code === '200D') { // joiners
 					if (buffer) {
 						joiner = true;
 						continue;
@@ -165,11 +168,12 @@ if (!window.Emoji) {
 				}
 				buffer = code;
 				altBuffer = symbol;
-			}
+			};
+
 			if (buffer) {
 				out += Emoji.getEmojiHTML(buffer, altBuffer, true);
 			}
 			return out;
 		},
-	}
-}
+	};
+})();
